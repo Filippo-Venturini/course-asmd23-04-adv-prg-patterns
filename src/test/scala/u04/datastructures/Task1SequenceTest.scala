@@ -18,8 +18,7 @@ class Task1SequenceTest extends AnyFunSuite with BeforeAndAfterAll:
   override def beforeAll(): Unit =
     for (_ <- 0 to numberOfTests) do
       randomValues :+ (rand.nextInt(), rand.nextString(stringLength))
-
-
+  
   test("of is a correct factory"):
     forAll(randomValues): (i, s) =>
       of(i, s) shouldBe of(i, s).filter(e => e == s)

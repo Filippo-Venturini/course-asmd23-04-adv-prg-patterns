@@ -7,12 +7,16 @@ import u04.datastructures.Sequences.*
 import Sequence.*
 import org.scalacheck.Test.Parameters
 
-object Task1SequenceCheck extends Properties("MyApp"):
+object Task1SequenceCheck extends Properties("SequenceTest"):
 
   def smallInt(): Gen[Int] = Gen.choose(0, 100)
 
   override def overrideParameters(p: Parameters): Parameters =
-    p.withMinSuccessfulTests(50)
+      p.withMinSuccessfulTests(50)
+       .withMaxDiscardRatio(5f)
+       .withMinSize(10)
+       .withMaxSize(100)
+       .withWorkers(4)
 
   property("of is a correct factory") =
     forAll(smallInt(), arbitrary[String]): (i, s) =>
