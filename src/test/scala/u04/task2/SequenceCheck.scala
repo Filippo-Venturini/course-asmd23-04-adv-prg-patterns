@@ -12,9 +12,13 @@ object SequenceCheck extends Properties("Sequence"):
   yield elements.foldRight[Sequence[Int]](nil())((e, acc) => cons(e, acc)) // Convert the list to a sequence
 
   //Pick a random mapper between the three
-  val mapperArbitrary: Arbitrary[Int => Int] = Arbitrary(Gen.oneOf[Int => Int](_ + 1, _ * 2, x => x * x))
+  def mapperGen(): Gen[Int => Int] = Gen.oneOf[Int => Int](_ + 1, _ * 2, x => x * x)
 
- /* property("map axiom") =
-    forAll(sequenceGen(), mapperArbitrary.arbitrary): ???*/
+  /*
+  property("map axiom") =
+    forAll(sequenceGen(), mapperGen()): (s, m) =>
+      (s, m) match
+      case(nil, _) => map(s, m) == nil
+      case(cons(h,t), m) => map(s, m) == cons(m(h), map(t, m))*/
 
 
