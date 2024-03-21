@@ -10,11 +10,6 @@ import org.scalacheck.Test.Parameters
 object Task1SequenceCheck extends Properties("SequenceTest"):
 
   def smallInt(): Gen[Int] = Gen.choose(0, 100)
-
-  def sequenceGen(): Gen[Sequence[Int]] = for
-    size <- Gen.choose(0, 100) // Use the Gen.choose method to determine the size of the sequence
-    elements <- Gen.listOfN(size, Gen.choose(0, 100)) // Generate a list of random integers
-  yield elements.foldRight[Sequence[Int]](Nil())((e, acc) => Cons(e, acc)) // Convert the list to a sequence
   
   override def overrideParameters(p: Parameters): Parameters =
       p.withMinSuccessfulTests(50)
