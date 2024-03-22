@@ -30,40 +30,40 @@ object SequenceCheck extends Properties("Sequence"):
 
     def operatorGen(): Gen[(Int, Int) => Int] = Gen.oneOf[(Int, Int) => Int]((x, y) => x + y, (x, y) => x - y, (x, y) => x * y)
 
-    /*property("filter axiom") =
+    property("filter axiom") =
       forAll(sequenceGen(), filterGen()): (s, f) =>
         (getCons(s), f) match
           case (None, _) => filter(nil(), f) == nil()
-          case (Some((h, t)), f) => (f(h) && filter(s, f) == cons(h, filter(t, f)) || (!f(h) && filter(s, f) == filter(t, f))*/
+          case (Some((h, t)), f) => (f(h) && filter(s, f) == cons(h, filter(t, f)) || (!f(h) && filter(s, f) == filter(t, f)))
 
     property("map axiom") =
       forAll(sequenceGen(), mapperGen()): (s, m) =>
         (getCons(s), m) match
         case(None, _) => map(s, m) == nil()
         case(Some((h,t)), m) => map(s, m) == cons(m(h), map(t, m))
-/*
+
     property("concat axiom") =
       forAll(sequenceGen(), sequenceGen()): (s1, s2) =>
-        (s1, s2) match
-          case (s1, nil) => concat(s1, s2) == s1
-          case (nil, s2) => concat(s1, s2) == s2
-          //case (cons(h, t), s2) => concat(s1,s2) == cons(h, concat(t, s2))
+        (getCons(s1), getCons(s2)) match
+          case (None, None) => concat(s1, s2) == nil()
+          case (Some((h1, t1)), None) => concat(s1, s2) == cons(h1, t1)
+          case (None, Some((h2, t2))) => concat(s1, s2) == cons(h2, t2)
+          case (Some((h1, t1)), Some((h2, t2))) => concat(s1,s2) == cons(h1, concat(t1, s2))
 
     property("flatmap axiom") =
       forAll(sequenceGen(), flatMapGen()): (s, f) =>
-        (s, f) match
-          case (nil, _) => flatMap(s, f) == nil
-          //case (cons(h, t), f) => flatMap(s, f) == concat(f(h), flatMap(t, f))
+        (getCons(s), f) match
+          case (None, _) => flatMap(s, f) == nil()
+          case (Some((h, t)), f) => flatMap(s, f) == concat(f(h), flatMap(t, f))
 
     property("foldLeft axiom") =
       forAll(sequenceGen(), intGen(), operatorGen()): (s, z, op) =>
-        (s, z, op) match
-          case (nil, z, _) => foldLeft(s, z, op) == z
-          //case (cons(h, t), z, op) => foldLeft(s, z, op) == foldLeft(t, op(z, h), op)
+        (getCons(s), z, op) match
+          case (None, z, _) => foldLeft(s, z, op) == z
+          case (Some((h, t)), z, op) => foldLeft(s, z, op) == foldLeft(t, op(z, h), op)
 
-    property("reduce axiom") =
+    /*property("reduce axiom") =
       forAll(sequenceGen(), operatorGen()): (s, op) =>
         (s, op) match
           //case (cons(h, t), op) => reduce(s, op) == foldLeft(t, h, op)
-          case (nil, _) => intercept[UnsupportedOperationException]{ reduce(s, op) } == UnsupportedOperationException()
-*/
+          case (nil, _) => intercept[UnsupportedOperationException]{ reduce(s, op) } == UnsupportedOperationException()*/
