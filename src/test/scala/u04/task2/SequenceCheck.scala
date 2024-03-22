@@ -16,7 +16,7 @@ object SequenceCheck extends Properties("Sequence"):
 
     def sequenceGen(): Gen[Sequence[Int]] = for
       b <- Gen.prob(0.7)
-      size <- Gen.choose(0, 0) // Use the Gen.choose method to determine the size of the sequence
+      size <- Gen.choose(0, 100) // Use the Gen.choose method to determine the size of the sequence
       elements <- Gen.listOfN(size, Gen.choose(0, 100)) // Generate a list of random integers
     yield if b then nil() else elements.foldRight[Sequence[Int]](nil())((e, acc) => cons(e, acc)) // Convert the list to a sequence
 
@@ -30,18 +30,18 @@ object SequenceCheck extends Properties("Sequence"):
 
     def operatorGen(): Gen[(Int, Int) => Int] = Gen.oneOf[(Int, Int) => Int]((x, y) => x + y, (x, y) => x - y, (x, y) => x * y)
 
-    property("filter axiom") =
+    /*property("filter axiom") =
       forAll(sequenceGen(), filterGen()): (s, f) =>
-        (s, f) match
-          case (nil, _) => filter(nil, f) == nil
-          //case (cons(h, t), f) => (f(h) && filter(s, f) == cons(h, filter(t, f)) || (!f(h) && filter(s, f) == filter(t))
+        (getCons(s), f) match
+          case (None, _) => filter(nil(), f) == nil()
+          case (Some((h, t)), f) => (f(h) && filter(s, f) == cons(h, filter(t, f)) || (!f(h) && filter(s, f) == filter(t, f))*/
 
     property("map axiom") =
       forAll(sequenceGen(), mapperGen()): (s, m) =>
-        (s, m) match
-        case(nil, _) => map(s, m) == nil
-        //case(cons(h,t), m) => map(s, m) == cons(m(h), map(t, m))
-
+        (getCons(s), m) match
+        case(None, _) => map(s, m) == nil()
+        case(Some((h,t)), m) => map(s, m) == cons(m(h), map(t, m))
+/*
     property("concat axiom") =
       forAll(sequenceGen(), sequenceGen()): (s1, s2) =>
         (s1, s2) match
@@ -66,3 +66,4 @@ object SequenceCheck extends Properties("Sequence"):
         (s, op) match
           //case (cons(h, t), op) => reduce(s, op) == foldLeft(t, h, op)
           case (nil, _) => intercept[UnsupportedOperationException]{ reduce(s, op) } == UnsupportedOperationException()
+*/

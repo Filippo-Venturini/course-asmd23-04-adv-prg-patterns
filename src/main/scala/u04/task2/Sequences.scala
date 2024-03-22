@@ -39,6 +39,7 @@ object Sequences:
 
   trait SequenceADT:
     type Sequence[A]
+    def getCons[A](s: Sequence[A]): Option[(A, Sequence[A])]
     def cons[A](h: A, t: Sequence[A]): Sequence[A]
     def nil[A](): Sequence[A]
     def filter[A](sequence: Sequence[A], f: A => Boolean): Sequence[A]
@@ -56,7 +57,7 @@ object Sequences:
 
     opaque type Sequence[A] = SequenceImpl[A]
 
-    def unapply[A](s: Sequence[A]): Option[(A, Sequence[A])] = s match
+    override def getCons[A](s: Sequence[A]): Option[(A, Sequence[A])] = s match
       case Cons(h, t) => Some((h, t))
       case _ => None
 
@@ -89,13 +90,17 @@ object Sequences:
     override def reduce[A](sequence: Sequence[A], op: (A, A) => A): A = sequence match
       case Cons(h, t) => foldLeft(t, h, op)
       case Nil() => throw UnsupportedOperationException()
-
+  
   object ScalaListSequenceADT extends SequenceADT:
     opaque type Sequence[A] = List[A]
 
     override def cons[A](h: A, t: Sequence[A]): Sequence[A] = h :: t
 
     override def nil[A](): Sequence[A] = List()
+
+    override def getCons[A](s: Sequence[A]): Option[(A, Sequence[A])] = s match
+      case h :: t => Some((h, t))
+      case _ => None
 
     override def filter[A](sequence: Sequence[A], f: A => Boolean): Sequence[A] = sequence.filter(f)
 
