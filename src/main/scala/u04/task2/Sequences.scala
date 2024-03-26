@@ -30,7 +30,7 @@ axioms :
   foldLeft(nil, z, _) = z
   foldLeft(cons(h, t), z, op) = foldLeft(t, op(z, h), op)
 
-  reduce(nil, _) = exception
+  reduce(nil, _) = nil
   reduce(s, op) = foldLeft(t, h, op)
  */
 
