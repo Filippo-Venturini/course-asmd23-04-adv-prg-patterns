@@ -33,6 +33,8 @@ The implementation of the ADT corresponding to the Sequence can be found at the 
 
 First of all, using a DSL, the specification of the Sequence type is described, in particular: type, constructors, operations, and axioms.
 
+The following operations are defined: concat, filter, map, flatmap, fold and reduce.
+
 Then the specification is turned into a Scala trait, defining all the functionalities that a Sequence offers. Afterwards, two implementations are realized, one using the `Cons/Nil` approach, the other using `Scala List`.
 
 ### Cons/Nil implementation
@@ -49,6 +51,13 @@ With this approach, in both implementations, two constructors are available for 
 
 ### Tests
 
-The aim of this part is to verify that both implementations works by writing one test for each axiom defined in the ADT specifications, using `ScalaCheck`.
+The aim of this part is to verify that both implementations work by writing one test for each axiom defined in the ADT specifications, using `ScalaCheck`.
 
 The code can be found at the path: *package scala.u04.task2.SequenceCheck.scala*.
+
+To demonstrate that both implementations satisfy all the tests, a function that tests a SequenceADT is created and then invoked two times with the two different implementations.
+
+Inside the function, following the axioms defined in the ADT specifications, all the tests make assertions and check that every operation of the Sequence works as expected.
+
+Built-in generators are used for the parameters of the tests, particularly for generating a random Sequence (monadically), mappers, and filters.
+
