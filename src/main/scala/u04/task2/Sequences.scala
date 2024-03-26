@@ -21,7 +21,6 @@ axioms :
   map(nil, f) = nil
   map (cons(h, t), f) = cons(f(h), map(t, f))
 
-  concat(s1, nil) = s1
   concat(nil, s2) = s2
   concat(cons(h, t), s2) = cons(h, concat(t, s2))
 
@@ -47,7 +46,7 @@ object Sequences:
     def concat[A](s1: Sequence[A], s2: Sequence[A]): Sequence[A]
     def flatMap[A, B](sequence: Sequence[A], f: A => Sequence[B]): Sequence[B]
     def foldLeft[A, B](sequence: Sequence[A], z: B, op: (B, A) => B): B
-    def reduce[A](sequence: Sequence[A], op: (A, A) => A): A
+    def reduce[A](sequence: Sequence[A], op: (A, A) => A): Option[A]
 
   object BasicSequenceADT extends SequenceADT:
     private enum SequenceImpl[A]:
@@ -74,7 +73,6 @@ object Sequences:
       case _ => Nil()
 
     override def concat[A](s1: Sequence[A], s2: Sequence[A]): Sequence[A] = (s1, s2) match
-      case (s1, Nil()) => s1
       case (Nil(), s2) => s2
       case (Cons(h, t), s2) => Cons(h, concat(t, s2))
 
@@ -87,9 +85,9 @@ object Sequences:
       case Cons(h, t) => foldLeft(t, op(z, h), op)
       case Nil() => z
 
-    override def reduce[A](sequence: Sequence[A], op: (A, A) => A): A = sequence match
-      case Cons(h, t) => foldLeft(t, h, op)
-      case Nil() => throw UnsupportedOperationException()
+    override def reduce[A](sequence: Sequence[A], op: (A, A) => A): Option[A] = sequence match
+      case Cons(h, t) => Some(foldLeft(t, h, op))
+      case Nil() => None
   
   object ScalaListSequenceADT extends SequenceADT:
     opaque type Sequence[A] = List[A]
@@ -112,7 +110,7 @@ object Sequences:
 
     override def foldLeft[A, B](sequence: Sequence[A], z: B, op: (B, A) => B): B = sequence.foldLeft(z)(op)
 
-    override def reduce[A](sequence: Sequence[A], op: (A, A) => A): A = sequence.reduce(op)
+    override def reduce[A](sequence: Sequence[A], op: (A, A) => A): Option[A] = sequence.reduceOption(op)
 
 
 

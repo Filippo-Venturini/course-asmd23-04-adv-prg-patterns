@@ -62,8 +62,8 @@ object SequenceCheck extends Properties("Sequence"):
           case (None, z, _) => foldLeft(s, z, op) == z
           case (Some((h, t)), z, op) => foldLeft(s, z, op) == foldLeft(t, op(z, h), op)
 
-    /*property("reduce axiom") =
+    property("reduce axiom") =
       forAll(sequenceGen(), operatorGen()): (s, op) =>
-        (s, op) match
-          //case (cons(h, t), op) => reduce(s, op) == foldLeft(t, h, op)
-          case (nil, _) => intercept[UnsupportedOperationException]{ reduce(s, op) } == UnsupportedOperationException()*/
+        (getCons(s), op) match
+          case (Some(h, t), op) => reduce(s, op).contains(foldLeft(t, h, op))
+          case (None, _) => reduce(s, op).isEmpty
