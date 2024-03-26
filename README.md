@@ -1,6 +1,6 @@
 # Lab04 - Advanced Programming
 
-## Task 1 - Test-Operate
+## Task 1 - Test Operate
 
 In the first phase, a Scala object is created at the following path: *test.scala.u04.datastructures.Task1SequenceCheck.scala*. Here, there is a property for testing with `ScalaCheck` to verify that the "of" operator is a correct factory.
 
