@@ -11,13 +11,14 @@ import scala.util.Random
 
 class Task1SequenceTest extends AnyFunSuite with BeforeAndAfterAll:
   val rand : Random = Random()
-  val randomValues: List[(Int, String)] = List()
+  var randomValues: List[(Int, String)] = List()
+  val maxInt = 100
   val numberOfTests = 100
   val stringLength = 10
 
   override def beforeAll(): Unit =
-    for (_ <- 0 to numberOfTests) do
-      randomValues :+ (rand.nextInt(), rand.nextString(stringLength))
+    for (_ <- 1 to numberOfTests) do
+      randomValues = randomValues :+ (rand.nextInt(maxInt), rand.nextString(stringLength))
   
   test("of is a correct factory"):
     forAll(randomValues): (i, s) =>

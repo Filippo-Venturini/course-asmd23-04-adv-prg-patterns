@@ -42,7 +42,7 @@ object Optionals:
     y <- optionalRandom()
     z <- optionalRandom()
   yield x + y + z
-  println(m)
+  println("Sum: " + m)
 
   // equivalent formulation by flatMap/map
   val m2: Optional[Double] =
@@ -54,4 +54,4 @@ object Optionals:
 
   // use of some monadic operator
   println:
-    map2(Just("rand: "), optionalRandom())(_ + _) // Some("rand: 0.223..")  
+    map2(Just("rand: "), optionalRandom())(_ + _) // Some("rand: 0.223..")
